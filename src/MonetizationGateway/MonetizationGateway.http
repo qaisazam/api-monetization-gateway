@@ -1,0 +1,6 @@
+@MonetizationGateway_HostAddress = http://localhost:5145
+
+GET {{MonetizationGateway_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

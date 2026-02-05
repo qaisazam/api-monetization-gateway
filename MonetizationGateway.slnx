@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MonetizationGateway/MonetizationGateway.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MonetizationGateway.IntegrationTests/MonetizationGateway.IntegrationTests.csproj" />
+    <Project Path="tests/MonetizationGateway.UnitTests/MonetizationGateway.UnitTests.csproj" />
+  </Folder>
+</Solution>
