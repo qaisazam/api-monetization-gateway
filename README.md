@@ -218,7 +218,20 @@ docker compose up --build
 - **Health:** `GET http://localhost:8080/health` (no auth)  
 - **Stub:** `GET http://localhost:8080/internal/stub` with header `X-Api-Key: <your-key>`
 
-Environment variables (in `docker-compose.yml`): `ConnectionStrings__DefaultConnection`, `Redis__Configuration`, `InternalApi__BaseUrl`. Migrations: run on first app start or manually (e.g. `dotnet ef database update` in container or after attaching to DB).
+**Start/stop:** From repo root, `docker compose up -d` to start; `docker compose down` to stop and remove containers (DB data is lost after `down`).
+
+**Migrations:** The app does not run migrations automatically. After the stack is up, apply them once from the host:
+
+```bash
+cd src/MonetizationGateway
+dotnet ef database update --connection "Server=localhost,1433;Database=MonetizationGateway;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=true;"
+```
+
+Then restart the gateway: `docker compose restart monetization-gateway`.
+
+**Troubleshooting:** If port 6379 or 1433 is already in use (e.g. Redis or SQL running elsewhere), either stop that process or change the port mapping in `docker-compose.yml` (e.g. `6380:6379` for Redis). Use `docker compose up -d` so all services share the same network; starting containers separately can break gateway → Redis/SQL connectivity.
+
+Environment variables (in `docker-compose.yml`): `ConnectionStrings__DefaultConnection`, `Redis__Configuration`, `InternalApi__BaseUrl`.
 
 **Dockerfile** (`docker/Dockerfile`): Multi-stage build (SDK 10 for build, aspnet 10 for runtime); exposes 8080; entrypoint runs the published app.
 
