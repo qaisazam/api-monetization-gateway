@@ -1,4 +1,5 @@
 using MonetizationGateway.Constants;
+using MonetizationGateway.Data;
 using MonetizationGateway.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +7,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddMonetizationGateway(builder.Configuration);
 
 var app = builder.Build();
+
+if (!app.Environment.IsEnvironment("Testing"))
+{
+    await using (var scope = app.Services.CreateAsyncScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        await DataSeed.EnsureSeedAsync(db);
+    }
+}
 
 app.UseHttpsRedirection();
 app.UseMonetizationGatewayPipeline();

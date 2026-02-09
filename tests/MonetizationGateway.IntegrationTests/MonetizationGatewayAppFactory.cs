@@ -46,12 +46,14 @@ public class MonetizationGatewayAppFactory : WebApplicationFactory<Program>
         using var scope = Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         await db.Database.EnsureCreatedAsync();
+        await DataSeed.EnsureSeedAsync(db);
         if (await db.Customers.AnyAsync(c => c.ApiKeyHash == Sha256Hash(apiKey)))
             return;
+        var freeTierId = await db.Tiers.Where(t => t.Name == "Free").Select(t => t.Id).FirstAsync();
         db.Customers.Add(new Customer
         {
             ExternalId = "test-customer",
-            TierId = 1,
+            TierId = freeTierId,
             ApiKeyHash = Sha256Hash(apiKey),
             CreatedAt = DateTime.UtcNow
         });

@@ -1,9 +1,7 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
-
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
 namespace MonetizationGateway.Migrations
 {
@@ -99,15 +97,6 @@ namespace MonetizationGateway.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.InsertData(
-                table: "Tiers",
-                columns: new[] { "Id", "MonthlyPriceUsd", "MonthlyQuota", "Name", "RequestsPerSecond" },
-                values: new object[,]
-                {
-                    { 1, 0m, 1000, "Free", 2 },
-                    { 2, 50m, 100000, "Pro", 10 }
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_ApiUsageLogs_CustomerId",
                 table: "ApiUsageLogs",
@@ -134,17 +123,10 @@ namespace MonetizationGateway.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "ApiUsageLogs");
-
-            migrationBuilder.DropTable(
-                name: "MonthlyUsageSummaries");
-
-            migrationBuilder.DropTable(
-                name: "Customers");
-
-            migrationBuilder.DropTable(
-                name: "Tiers");
+            migrationBuilder.DropTable(name: "ApiUsageLogs");
+            migrationBuilder.DropTable(name: "MonthlyUsageSummaries");
+            migrationBuilder.DropTable(name: "Customers");
+            migrationBuilder.DropTable(name: "Tiers");
         }
     }
 }

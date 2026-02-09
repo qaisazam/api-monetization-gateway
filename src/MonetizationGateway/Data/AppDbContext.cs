@@ -47,29 +47,5 @@ public class AppDbContext : DbContext
             e.HasIndex(x => new { x.CustomerId, x.Year, x.Month }).IsUnique();
             e.HasOne(x => x.Customer).WithMany(c => c.MonthlyUsageSummaries).HasForeignKey(x => x.CustomerId);
         });
-
-        SeedTiers(modelBuilder);
-    }
-
-    private static void SeedTiers(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Tier>().HasData(
-            new Tier
-            {
-                Id = 1,
-                Name = "Free",
-                MonthlyQuota = 1000,
-                RequestsPerSecond = 2,
-                MonthlyPriceUsd = 0
-            },
-            new Tier
-            {
-                Id = 2,
-                Name = "Pro",
-                MonthlyQuota = 100_000,
-                RequestsPerSecond = 10,
-                MonthlyPriceUsd = 50
-            }
-        );
     }
 }

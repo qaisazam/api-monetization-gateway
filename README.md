@@ -244,6 +244,14 @@ Environment variables (in `docker-compose.yml`): `ConnectionStrings__DefaultConn
    ```
 
 To call authenticated endpoints, add a **Customer** with `ApiKeyHash` = SHA256 (lowercase hex) of your API key and the desired `TierId`. Tiers are seeded (Free, Pro).
+**Seeding:** All seed data (tiers and test customers) is applied at **runtime** on startup. 
+
+| Tier | API key (use as `X-Api-Key` header) |
+|------|--------------------------------------|
+| Free | `sk_mgw_7f3a9b2c4e1d8f6a` |
+| Pro  | `sk_mgw_a8c2e5f1b9d4e7a3` |
+
+To add more customers, insert into **Customers** with `ApiKeyHash` = SHA256 (lowercase hex) of the API key and the desired `TierId`. 
 
 ---
 
