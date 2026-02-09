@@ -1,0 +1,27 @@
+# Build outputs (avoid copying host obj/bin with Windows NuGet paths into Linux container)
+**/bin/
+**/obj/
+
+# IDE and version control
+.vs/
+.vscode/
+.idea/
+.git/
+*.user
+*.suo
+
+# Test and other non-runtime
+**/tests/
+**/*.Tests/
+TestResults/
+*.trx
+*.coverage
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Misc
+*.md
+*.log

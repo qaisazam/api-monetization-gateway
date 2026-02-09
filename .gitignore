@@ -30,7 +30,7 @@ TestResults/
 *.swo
 
 ## Docker
-.dockerignore
+
 
 ## NuGet
 *.nupkg
