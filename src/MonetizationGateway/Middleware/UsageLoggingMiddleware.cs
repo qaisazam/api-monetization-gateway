@@ -2,7 +2,7 @@ using MonetizationGateway.Services;
 
 namespace MonetizationGateway.Middleware;
 
-/// <summary>Logs successful API usage (fire-and-forget) and increments monthly quota; logs errors on failure.</summary>
+/// <summary>Logs successful API usage (awaited after response) and increments monthly quota; logs errors on failure.</summary>
 public class UsageLoggingMiddleware
 {
     private readonly RequestDelegate _next;
@@ -27,23 +27,20 @@ public class UsageLoggingMiddleware
         var status = context.Response.StatusCode;
         if (status >= 200 && status < 300)
         {
-            _ = Task.Run(async () =>
+            try
             {
-                try
-                {
-                    await usageTracking.LogUsageAsync(
-                        requestContext.CustomerId.Value,
-                        requestContext.UserId,
-                        path,
-                        method,
-                        status,
-                        CancellationToken.None);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Fire-and-forget usage logging failed for CustomerId {CustomerId}, Endpoint {Endpoint}", requestContext.CustomerId.Value, path);
-                }
-            });
+                await usageTracking.LogUsageAsync(
+                    requestContext.CustomerId.Value,
+                    requestContext.UserId,
+                    path,
+                    method,
+                    status,
+                    context.RequestAborted);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Usage logging failed for CustomerId {CustomerId}, Endpoint {Endpoint}", requestContext.CustomerId.Value, path);
+            }
         }
     }
 }
